@@ -261,49 +261,50 @@ abstract class Server
      */
     public function start(Process $process = null)
     {
-        // Check if the server script exists at given path
-        if (false === $this->serverPath || false === is_file($this->serverPath)) {
-            throw new \RuntimeException(sprintf(
-                "Could not find server script at path '%s'",
-                $this->serverPath
-            ));
-        }
-
-        // Create process object if neccessary
-        if (null === $process) {
-            $processBuilder = new ProcessBuilder(array(
-                $this->nodeBin,
-                $this->serverPath,
-            ));
-            $processBuilder->setEnv('HOST', $this->host)
-                ->setEnv('PORT', $this->port);
-
-            if (!empty($this->nodeModulesPath)) {
-                $processBuilder->setEnv('NODE_PATH', $this->nodeModulesPath);
-            }
-
-            $process = $processBuilder->getProcess();
-        }
-        $this->process = $process;
-
-        // Start server process
-        $this->process->start();
-        $this->connection = null;
-
-        // Wait for the server to start up
-        $time = 0;
-        $successString = sprintf("server started on %s:%s", $this->host, $this->port);
-        while ($this->process->isRunning() && $time < $this->threshold) {
-            if ($successString == trim($this->process->getOutput())) {
+//        // Check if the server script exists at given path
+//        if (false === $this->serverPath || false === is_file($this->serverPath)) {
+//            throw new \RuntimeException(sprintf(
+//                "Could not find server script at path '%s'",
+//                $this->serverPath
+//            ));
+//        }
+//
+//        // Create process object if neccessary
+//        if (null === $process) {
+//            $processBuilder = new ProcessBuilder(array(
+//                $this->nodeBin,
+//                $this->serverPath,
+//            ));
+//            $processBuilder->setEnv('HOST', $this->host)
+//                ->setEnv('PORT', $this->port);
+//
+//            if (!empty($this->nodeModulesPath)) {
+//                $processBuilder->setEnv('NODE_PATH', $this->nodeModulesPath);
+//            }
+//
+//            $process = $processBuilder->getProcess();
+//        }
+//        $this->process = $process;
+//
+//        // Start server process
+//        $this->process->start();
+//        $this->connection = null;
+//
+//        // Wait for the server to start up
+//        $time = 0;
+//        $successString = sprintf("server started on %s:%s", $this->host, $this->port);
+//        while ($time < $this->threshold) {
+//            if ($this->process->isRunning() && $successString === trim($this->process->getOutput())) {
                 $this->connection = new Connection($this->host, $this->port);
-                break;
-            }
-            usleep(1000);
-            $time += 1000;
-        }
-
-        // Make sure the server is ready or throw an exception otherwise
-        $this->checkAvailability();
+//                break;
+//            }
+//
+//            usleep(1000);
+//            $time += 1000;
+//        }
+//
+//        // Make sure the server is ready or throw an exception otherwise
+//        $this->checkAvailability();
     }
 
     /**
@@ -312,21 +313,21 @@ abstract class Server
      */
     public function stop()
     {
-        if (null === $this->process) {
-            return;
-        }
-
-        if (!$this->isRunning()) {
-            return;
-        }
-
-        if (null !== $this->getConnection()) {
-            // Force a 'clean' exit
-            // See: http://stackoverflow.com/a/5266208/187954
-            $this->doEvalJS($this->getConnection(), 'process.exit(0);');
-            $this->process->stop();
-            $this->process = null;
-        }
+//        if (null === $this->process) {
+//            return;
+//        }
+//
+//        if (!$this->isRunning()) {
+//            return;
+//        }
+//
+//        if (null !== $this->getConnection()) {
+//            // Force a 'clean' exit
+//            // See: http://stackoverflow.com/a/5266208/187954
+//            $this->doEvalJS($this->getConnection(), 'process.exit(0);');
+//            $this->process->stop();
+//            $this->process = null;
+//        }
     }
 
     /**
@@ -336,8 +337,8 @@ abstract class Server
      */
     public function restart(Process $process = null)
     {
-        $this->stop();
-        $this->start($process);
+//        $this->stop();
+//        $this->start($process);
     }
 
     /**
@@ -349,11 +350,11 @@ abstract class Server
      */
     public function isRunning()
     {
-        if (null === $this->process) {
-            return false;
-        }
-
-        return $this->process->isRunning();
+//        if (null === $this->process) {
+//            return false;
+//        }
+//
+//        return $this->process->isRunning();
     }
 
     /**
@@ -395,27 +396,27 @@ abstract class Server
      */
     protected function checkAvailability()
     {
-        if (null === $this->connection) {
-            if (null === $this->process) {
-                throw new \RuntimeException('No connection available. Did you start the server?');
-            }
-
-            if ($this->process->isRunning()) {
-                $this->stop();
-                throw new \RuntimeException(sprintf(
-                    'Server did not respond in time: (%s) [Stopped]',
-                    $this->process->getExitCode()
-                ));
-            }
-        }
-
-        if (!$this->process->isRunning()) {
-            throw new \RuntimeException(sprintf(
-                'Server process has been terminated: (%s) [%s]',
-                $this->process->getExitCode(),
-                $this->process->getErrorOutput()
-            ));
-        }
+//        if (null === $this->connection) {
+//            if (null === $this->process) {
+//                throw new \RuntimeException('No connection available. Did you start the server?');
+//            }
+//
+//            if ($this->process->isRunning()) {
+//                $this->stop();
+//                throw new \RuntimeException(sprintf(
+//                    'Server did not respond in time: (%s) [Stopped]',
+//                    $this->process->getExitCode()
+//                ));
+//            }
+//        }
+//
+//        if (!$this->process->isRunning()) {
+//            throw new \RuntimeException(sprintf(
+//                'Server process has been terminated: (%s) [%s]',
+//                $this->process->getExitCode(),
+//                $this->process->getErrorOutput()
+//            ));
+//        }
     }
 
     /**
