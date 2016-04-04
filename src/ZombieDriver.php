@@ -129,7 +129,7 @@ JS;
      */
     public function getCurrentUrl()
     {
-        return $this->server->evalJS('browser.location.toString()', 'json');
+        return $this->server->evalJS('null === browser.location ? "" : browser.location.toString()', 'json');
     }
 
     /**
